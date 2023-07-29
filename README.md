@@ -14,10 +14,10 @@ ___
 ## Setup
 
 1. Clone the repo
-`git clone https://github.com/your-username/vm-creation-discord-bot.git`
+`git clone https://github.com/krezio/vm-creator`
 
 2. Install the required dependencies:
-* `cd vm-creation-discord-bot`
+* `cd vm-creator`
 * `pip install -r requirements.txt`
 * `pip install -r requirements.txt`
 
