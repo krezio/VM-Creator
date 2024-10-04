@@ -9,26 +9,19 @@ from msrestazure.azure_exceptions import CloudError
 import discord
 
 
-# Discord Bot Token
 DISCORD_TOKEN = 'tokenhere'
-
-# Azure Credentials
 SUBSCRIPTION_ID = 'YOUR_SUBSCRIPTION_ID'
 CLIENT_ID = 'YOUR_AZURE_CLIENT_ID'
 CLIENT_SECRET = 'YOUR_AZURE_CLIENT_SECRET'
 TENANT_ID = 'YOUR_AZURE_TENANT_ID'
-
-# Azure Configuration
-LOCATION = 'southindia'  # Azure region where the VM will be created
+LOCATION = 'southindia'  
 
 
-# Generate a random string
 def generate_random_string(length):
     letters = string.ascii_lowercase
     return ''.join(random.choice(letters) for _ in range(length))
 
 
-# Create Azure Compute Management client
 def create_compute_client():
     credentials = ServicePrincipalCredentials(
         client_id=CLIENT_ID,
@@ -38,23 +31,12 @@ def create_compute_client():
     return ComputeManagementClient(credentials, SUBSCRIPTION_ID)
 
 
-# Create virtual machine
 def create_virtual_machine(username, admin_password, ram_size, vcpu_size, storage_size):
     compute_client = create_compute_client()
-
-    # Generate resource group name
     resource_group = f'{username}-rg'
-
-    # Generate network interface name
     network_interface_name = f'{username}-nic'
-
-    # Generate virtual machine name
     vm_name = f'{username}-vm'
-
-    # Create resource group
     compute_client.resource_groups.create_or_update(resource_group, {'location': LOCATION})
-
-    # Create network interface
     network_interface_params = {
         'location': LOCATION,
         'ip_configurations': [{
@@ -63,8 +45,6 @@ def create_virtual_machine(username, admin_password, ram_size, vcpu_size, storag
         }]
     }
     network_interface = compute_client.network_interfaces.create_or_update(resource_group, network_interface_name, network_interface_params).result()
-
-    # Create virtual machine
     vm_params = {
         'location': LOCATION,
         'os_profile': OSProfile(
@@ -117,22 +97,12 @@ def create_virtual_machine(username, admin_password, ram_size, vcpu_size, storag
     except CloudError as e:
         print(f'Error creating virtual machine: {e}')
         return False
-
-
-
-
-
-# Create Discord client
 bot = discord.Client()
 
-
-# Event: Bot is ready
 @bot.event
 async def on_ready():
     print('Bot is ready!')
 
-
-# Event: Bot receives a message
 @bot.event
 async def on_message(message):
     if message.content.startswith('!createvm'):
